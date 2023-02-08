@@ -9,11 +9,15 @@ import UIKit
 import RichTextView
 import SnapKit
 
+// MARK: Observer
+
 protocol Observer: AnyObject {
 
     func update(calcModel: CalcModel, enter: Bool)
     func alertInvalidInput()
 }
+
+// MARK: View
 
 @IBDesignable
 class ViewController: UIViewController, UITableViewDataSource, /*RichTextViewDelegate,*/ Observer {
@@ -94,7 +98,7 @@ class ViewController: UIViewController, UITableViewDataSource, /*RichTextViewDel
         self.present(alert, animated: true, completion: nil)
     }
     
-///Configures the Buttons
+    // MARK: Configures the Buttons
 
     /// Removes the last symbol of the workings.
     @IBAction func deleteButton(_ sender: Any) {

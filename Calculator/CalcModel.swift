@@ -8,6 +8,9 @@
 import Foundation
 import JavaScriptCore
 
+// MARK: StringProtocol
+
+/// Extends the String with funtion "string.index(of: string)" and more.
 extension StringProtocol {
     func index<S: StringProtocol>(of string: S, options: String.CompareOptions = []) -> Index? {
         range(of: string, options: options)?.lowerBound
@@ -32,6 +35,10 @@ extension StringProtocol {
     }
 }
 
+// MARK: CalcModel
+
+/// # This calculator is inspirated by the Jade Scientific Calculator on Android.
+
 /**
  The CalcModel class is the centre of the calculator.
  
@@ -40,7 +47,7 @@ extension StringProtocol {
  It calculates the results, saves them in a list and notifes the view.
  */
 class CalcModel {
-
+    
     /**
      Saves the workings and result of previous calculations.
      */
@@ -68,6 +75,8 @@ class CalcModel {
         context.evaluateScript(jsCode)
     }
 
+    // MARK: Observer
+    
     /// For attaching a observer
     func attach(_ observer: Observer) {
         observers.append(observer)
@@ -85,6 +94,8 @@ class CalcModel {
         observers.forEach({ $0.update(calcModel: self, enter: e) })
     }
 
+    // MARK: Logic
+    
     /// When a digit is pressed it will be appended to the workings of the calculator.
     func digitPressed(_ key: String) {
         workings += key
@@ -180,6 +191,8 @@ class CalcModel {
         return " "
     }
 
+    // MARK: Formatting
+    
     /// Formats the workings before calculation with Algebrite.
     func formatWorkings(_ w: inout String) -> String {
         w.replace("×", with: "*")
