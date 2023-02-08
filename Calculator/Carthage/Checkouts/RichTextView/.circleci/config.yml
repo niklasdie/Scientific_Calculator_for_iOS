@@ -1,0 +1,139 @@
+version: 2.1
+
+website_docker_defaults: &website_docker_defaults
+  working_directory: ~/repo/website
+  docker:
+    - image: circleci/node:16.3.0
+
+mac_defaults: &mac_defaults
+  working_directory: ~/repo
+  macos:
+    xcode: "13.2.1"
+
+commands:
+  prep_mac_env:
+    steps:
+      - checkout:
+          path: ~/repo
+      - restore_cache:
+          name: Restores cocoapods Cache
+          key: richtextview-v3-{{ checksum "Podfile.lock" }}
+  save_cocoapods_cache:
+    steps:
+      - save_cache:
+          name: Saves cocoapods cache
+          key: richtextview-v3-{{ checksum "Podfile.lock" }}
+          paths:
+            - ./Pods
+            - ~/.cocoapods
+  prep_website_env:
+    description: Prepapres environment with cache
+    steps:
+      - checkout:
+          path: ~/repo
+      - restore_cache:
+          name: Restore node_modules cache
+          key: website-{{ .Branch }}-{{ checksum "yarn.lock" }}
+  save_website_cache:
+    description: Saves environment cache
+    steps:
+      - save_cache:
+          name: Save node_modules cache
+          key: website-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules/
+
+jobs:
+  build:
+    <<: *mac_defaults
+    steps:
+      - prep_mac_env
+      - run:
+          name: Set Ruby Version
+          command:  echo "ruby-2.5" > ~/.ruby-version
+      - run:
+          name: Install Gems
+          command: bundle install
+      - run:
+          name: Install CocoaPods
+          command: bundle exec pod install
+      - save_cocoapods_cache
+      - run:
+          name: Build and run RichTextView Tests
+          command: fastlane scan
+          environment:
+            SCAN_DEVICE: iPhone 11 Pro Max
+            SCAN_SCHEME: RichTextView
+      - store_test_results:
+          path: test_output/report.xml
+      - store_artifacts:
+          path: /tmp/test-results
+          destination: scan-test-results
+      - store_artifacts:
+          path: ~/Library/Logs/scan
+          destination: scan-logs
+  deploy:
+    <<: *mac_defaults
+    steps:
+      - prep_mac_env
+      - run:
+          name: Deploy
+          command: pod trunk push RichTextView.podspec --allow-warnings
+
+  website:
+    <<: *website_docker_defaults
+    steps:
+      - prep_website_env
+      - run: yarn install
+      - save_website_cache
+      - run: yarn build
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - build/
+  deploy_website:
+    <<: *website_docker_defaults
+    steps:
+      - prep_website_env
+      - attach_workspace:
+          at: ./
+      - add_ssh_keys:
+          fingerprints:
+            - "ea:64:9c:ee:8a:f7:7d:a2:f7:7d:39:e7:92:7a:54:6f"
+      - run:
+          name: Setup git user and deploy website
+          command: |
+            git config --global user.email "circleci-richtextview@users.noreply.github.com"
+            git config --global user.name "CircleCI RichTextView"
+            CUSTOM_COMMIT_MESSAGE="[skip ci]" USE_SSH=true yarn publish-gh-pages
+
+workflows:
+  version: 2
+  richtextview_and_website:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /^[0-9]+.[0-9]+.[0-9]+$/
+      - deploy:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /^[0-9]+.[0-9]+.[0-9]+$/
+            branches:
+              ignore: /.*/
+      - website
+      - deploy_website:
+          requires:
+            - website
+          filters:
+            branches:
+              only:
+                - master
+
+experimental:
+  notify:
+    branches:
+      only:
+        - master

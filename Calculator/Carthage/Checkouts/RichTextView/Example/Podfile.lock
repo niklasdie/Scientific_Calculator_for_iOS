@@ -1,0 +1,42 @@
+PODS:
+  - Down (0.8.2)
+  - iosMath (1.1.1)
+  - RichTextView (3.2.2):
+    - Down
+    - iosMath
+    - SnapKit
+  - SnapKit (5.0.0)
+  - SwiftLint (0.32.0)
+
+DEPENDENCIES:
+  - iosMath (from `https://github.com/tophatmonocle/iosMath.git`)
+  - RichTextView (from `../`)
+  - SwiftLint
+
+SPEC REPOS:
+  trunk:
+    - Down
+    - SnapKit
+    - SwiftLint
+
+EXTERNAL SOURCES:
+  iosMath:
+    :git: https://github.com/tophatmonocle/iosMath.git
+  RichTextView:
+    :path: "../"
+
+CHECKOUT OPTIONS:
+  iosMath:
+    :commit: 7518e763c44a82202ec36e518c5ab4b412adbdae
+    :git: https://github.com/tophatmonocle/iosMath.git
+
+SPEC CHECKSUMS:
+  Down: 8babe0cafe145de188d2efa76ea938a11a5fdc6f
+  iosMath: b34ba07d07db42347383033ed677d584107e4021
+  RichTextView: 1fcc337ed3788e533ae70e4c502bec08f64c4a06
+  SnapKit: fd22d10eb9aff484d79a8724eab922c1ddf89bcf
+  SwiftLint: 009a898ef2a1c851f45e1b59349bf6ff2ddc990d
+
+PODFILE CHECKSUM: a8027d7639fd9f97ecad8405a39ff981811dd6b2
+
+COCOAPODS: 1.11.2

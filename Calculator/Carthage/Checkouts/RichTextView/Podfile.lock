@@ -1,0 +1,67 @@
+PODS:
+  - Down (0.8.2)
+  - iosMath (1.1.1)
+  - iOSSnapshotTestCase (8.0.0):
+    - iOSSnapshotTestCase/SwiftSupport (= 8.0.0)
+  - iOSSnapshotTestCase/Core (8.0.0)
+  - iOSSnapshotTestCase/SwiftSupport (8.0.0):
+    - iOSSnapshotTestCase/Core
+  - Nimble (9.2.1)
+  - Nimble-Snapshots (9.3.0):
+    - Nimble-Snapshots/Core (= 9.3.0)
+  - Nimble-Snapshots/Core (9.3.0):
+    - iOSSnapshotTestCase (~> 8.0)
+    - Nimble
+  - Quick (4.0.0)
+  - SnapKit (5.0.0)
+  - SwiftLint (0.32.0)
+  - SwiftRichString (3.7.2)
+
+DEPENDENCIES:
+  - Down
+  - iosMath (from `https://github.com/tophatmonocle/iosMath.git`)
+  - Nimble
+  - Nimble-Snapshots
+  - Quick
+  - SnapKit
+  - SwiftLint
+  - SwiftRichString (from `https://github.com/tophatmonocle/SwiftRichString.git`)
+
+SPEC REPOS:
+  trunk:
+    - Down
+    - iOSSnapshotTestCase
+    - Nimble
+    - Nimble-Snapshots
+    - Quick
+    - SnapKit
+    - SwiftLint
+
+EXTERNAL SOURCES:
+  iosMath:
+    :git: https://github.com/tophatmonocle/iosMath.git
+  SwiftRichString:
+    :git: https://github.com/tophatmonocle/SwiftRichString.git
+
+CHECKOUT OPTIONS:
+  iosMath:
+    :commit: 7518e763c44a82202ec36e518c5ab4b412adbdae
+    :git: https://github.com/tophatmonocle/iosMath.git
+  SwiftRichString:
+    :commit: e0b72d5c96968d7802856d2be096202c9798e8d1
+    :git: https://github.com/tophatmonocle/SwiftRichString.git
+
+SPEC CHECKSUMS:
+  Down: 8babe0cafe145de188d2efa76ea938a11a5fdc6f
+  iosMath: b34ba07d07db42347383033ed677d584107e4021
+  iOSSnapshotTestCase: a670511f9ee3829c2b9c23e6e68f315fd7b6790f
+  Nimble: e7e615c0335ee4bf5b0d786685451e62746117d5
+  Nimble-Snapshots: 97270cd48f0e6eebd6c80ccf7dd35d4e57fb9997
+  Quick: 6473349e43b9271a8d43839d9ba1c442ed1b7ac4
+  SnapKit: fd22d10eb9aff484d79a8724eab922c1ddf89bcf
+  SwiftLint: 009a898ef2a1c851f45e1b59349bf6ff2ddc990d
+  SwiftRichString: d61b807db1f8834c26fee92b6dd3e1be2dc5af03
+
+PODFILE CHECKSUM: ecc4996936f36f5e9a7ebeadfeac1dec9b7ffc17
+
+COCOAPODS: 1.10.1
