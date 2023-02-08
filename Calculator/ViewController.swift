@@ -16,9 +16,9 @@ protocol Observer: AnyObject {
 }
 
 @IBDesignable
-class ViewController: UIViewController, UITableViewDataSource, RichTextViewDelegate, Observer {
+class ViewController: UIViewController, UITableViewDataSource, /*RichTextViewDelegate,*/ Observer {
     
-    let attributes = ["456": [NSAttributedString.Key.backgroundColor: UIColor.lightGray]]
+//    let attributes = ["456": [NSAttributedString.Key.backgroundColor: UIColor.lightGray]]  // TODO: RichTextView
 
     @IBOutlet var tableView: UITableView!
     @IBOutlet var calculatorWorkingsUILabel: UILabel!
@@ -30,6 +30,7 @@ class ViewController: UIViewController, UITableViewDataSource, RichTextViewDeleg
         super.viewDidLoad()
         tableView.dataSource = self
         calcModel.attach(self)
+        /// RichTextView enables to show the Label as Latex.
 //        richTextView = RichTextView( // TODO: RichTextView
 //            input: "[math]x^2[/math]",
 //            latexParser: LatexParser(),
@@ -46,6 +47,8 @@ class ViewController: UIViewController, UITableViewDataSource, RichTextViewDeleg
         update(calcModel: calcModel, enter: false)
     }
 
+    /// Updates the label that shows the calculator workings.
+    /// If enter is pressed it scrolls down to show the newest result.
     func update(calcModel: CalcModel, enter: Bool) {
         calculatorWorkingsUILabel.text = calcModel.workings
 //        richTextView.textViewDelegate = self  // TODO: RichTextView
@@ -59,6 +62,7 @@ class ViewController: UIViewController, UITableViewDataSource, RichTextViewDeleg
         }
     }
 
+    /// Configures the TableView
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return calcModel.resultList.count
     }
@@ -71,6 +75,7 @@ class ViewController: UIViewController, UITableViewDataSource, RichTextViewDeleg
         return cell
     }
     
+    /// Scrolls to the bottom of the TableView
     func scrollToBottom(){
         if (self.calcModel.resultList.count > 0) {
             DispatchQueue.main.async {
@@ -80,6 +85,7 @@ class ViewController: UIViewController, UITableViewDataSource, RichTextViewDeleg
         }
     }
 
+    /// Alert if the userinput is invalid.
     func alertInvalidInput() {
         let alert = UIAlertController(title: "Invalid Input",
                 message: "Invalid Input",
@@ -87,7 +93,10 @@ class ViewController: UIViewController, UITableViewDataSource, RichTextViewDeleg
         alert.addAction(UIAlertAction(title: "Okay", style: .default))
         self.present(alert, animated: true, completion: nil)
     }
+    
+///Configures the Buttons
 
+    /// Removes the last symbol of the workings.
     @IBAction func deleteButton(_ sender: Any) {
         if (!calcModel.workings.isEmpty) {
             calcModel.workings.removeLast()
@@ -99,17 +108,9 @@ class ViewController: UIViewController, UITableViewDataSource, RichTextViewDeleg
 //            )
         }
     }
-
+    
     @IBAction func enterButton(_ sender: Any) {
         calcModel.enterPressed()
-    }
-
-    func formatResult(result: Double) -> String {
-        if (result.truncatingRemainder(dividingBy: 1) == 0) {
-            return String(format: "%.0f", result)
-        } else {
-            return String(format: "%.6f", result)
-        }
     }
 
     @IBAction func divideButton(_ sender: Any) {
@@ -204,13 +205,13 @@ class ViewController: UIViewController, UITableViewDataSource, RichTextViewDeleg
         calcModel.digitPressed("9")
     }
     
-    func didTapCustomLink(withID linkID: String) {
-        DispatchQueue.main.async {
-                let alertController = UIAlertController(title: "Custom Link", message: linkID, preferredStyle: .alert)
-                alertController.addAction(UIAlertAction(title: "Okay", style: .default))
-                UIApplication.shared.keyWindow?.rootViewController?.present(alertController, animated: true)
-        }
-    }
+//    func didTapCustomLink(withID linkID: String) {  // TODO: RichTextView
+//        DispatchQueue.main.async {
+//                let alertController = UIAlertController(title: "Custom Link", message: linkID, preferredStyle: .alert)
+//                alertController.addAction(UIAlertAction(title: "Okay", style: .default))
+//                UIApplication.shared.keyWindow?.rootViewController?.present(alertController, animated: true)
+//        }
+//    }
 }
 
 

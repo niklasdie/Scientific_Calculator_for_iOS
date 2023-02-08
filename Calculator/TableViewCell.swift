@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// Class represens a cell in the TableView.
 class TableViewCell: UITableViewCell {
 
     @IBOutlet weak var calculatorResultWorkings: UILabel!

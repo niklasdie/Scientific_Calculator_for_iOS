@@ -32,16 +32,33 @@ extension StringProtocol {
     }
 }
 
+/**
+ The CalcModel class is the centre of the calculator.
+ 
+ CalcModel imports Algebrite as a math library and handles the view via an Observer-Pattern.
+ 
+ It calculates the results, saves them in a list and notifes the view.
+ */
 class CalcModel {
 
+    /**
+     Saves the workings and result of previous calculations.
+     */
     struct Result {
         let result: String
         let resultWorking: String
     }
 
+    /// Workings of the calculation
     var workings: String = " "
+    
+    /// List of previous calculations
     var resultList: Array<Result> = Array()
+    
+    /// Observers of CalcModel
     private lazy var observers = [Observer]()
+    
+    /// JavaScript to run Algebrite
     private let vm = JSVirtualMachine()
     private let context: JSContext
 
@@ -51,25 +68,31 @@ class CalcModel {
         context.evaluateScript(jsCode)
     }
 
+    /// For attaching a observer
     func attach(_ observer: Observer) {
         observers.append(observer)
     }
 
+    /// For detaching a observer
     func detach(_ observer: Observer) {
         if let idx = observers.firstIndex(where: { $0 === observer }) {
             observers.remove(at: idx)
         }
     }
 
+    /// For notifying all observers
     func notify(_ e: Bool) {
         observers.forEach({ $0.update(calcModel: self, enter: e) })
     }
 
+    /// When a digit is pressed it will be appended to the workings of the calculator.
     func digitPressed(_ key: String) {
         workings += key
         notify(false)
     }
 
+    /// When a operation is pressed it will be appended to the workings of the calculator.
+    /// If the operation in ''ans'' it append the last result.
     func performOperation(_ op: String) {
         if (op == "ans") {
             workings += resultList.last!.result
@@ -79,11 +102,13 @@ class CalcModel {
         notify(false)
     }
 
+    /// Clears the calculator workings.
     func clearAll() {
         workings = " "
         notify(false)
     }
 
+    /// Verifies if the input is valid. (Basic validation)
     func validInput() -> Bool {
         var count = 0
         var funcCharIndexes = [Int]()
@@ -130,6 +155,7 @@ class CalcModel {
         }
     }
 
+    /// When the enter key is pressed the result is calculated with Algebrite.
     func enterPressed() {
         if (validInput()) {
             let workingsDisplay = formatResultWorkings(&workings)
@@ -144,6 +170,7 @@ class CalcModel {
         notify(true)
     }
     
+    /// Calculates the result with Algebrite.
     func calculate(_ phrase: String) -> String {
         let jsModule = context.objectForKeyedSubscript("AlgebriteList")
         let jsAnalyzer = jsModule?.objectForKeyedSubscript("Math")
@@ -153,6 +180,7 @@ class CalcModel {
         return " "
     }
 
+    /// Formats the workings before calculation with Algebrite.
     func formatWorkings(_ w: inout String) -> String {
         w.replace("×", with: "*")
         w.replace(",", with: ".")
@@ -173,6 +201,7 @@ class CalcModel {
         return w
     }
     
+    /// Formats the workings before showing in the view.
     func formatResultWorkings(_ w: inout String) -> String {
         if (w.contains("√(")) {
             let sqrt = w.index(of: "√(")!
@@ -189,8 +218,7 @@ class CalcModel {
         return w
     }
     
-    
-    
+    /// Formats the result before showing in the view.
     func formatResult(_ r: inout String) -> String {
         r.replace(".", with: ",")
         r.replace("pi", with: "π")

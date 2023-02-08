@@ -8,6 +8,8 @@
 import UIKit
 import RichTextView
 
+// TODO: RichTextView
+/// This class is for RichTextView.
 class CalculatorLabel: UIView, RichTextViewDelegate {
     
     // MARK: - Constants
