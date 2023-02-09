@@ -161,6 +161,22 @@ class ViewController: UIViewController, UITableViewDataSource, /*RichTextViewDel
         calcModel.performOperation("ln(")
     }
     
+    @IBAction func sin(_ sender: Any) {
+        calcModel.performOperation("sin(")
+    }
+    
+    @IBAction func x(_ sender: Any) {
+        calcModel.performOperation("x")
+    }
+    
+    @IBAction func y(_ sender: Any) {
+        calcModel.performOperation("y")
+    }
+    
+    @IBAction func d_dx(_ sender: Any) {
+        calcModel.performOperation("d/dx")
+    }
+    
     @IBAction func ans(_ sender: Any) {
         calcModel.performOperation("ans")
     }

@@ -46,6 +46,20 @@ extension StringProtocol {
  
  It calculates the results, saves them in a list and notifes the view.
  */
+
+/*
+ TODOLIST:
+    - Cursor to see where the next pressed symbol will show up
+    - Swiping on the numbers to move cursor forward and backward
+    - Better representation of string (Latex?)
+    - More math operations and variables / constants
+    - Tabs to group math operations
+    - Button for decimal representation of solution if available
+    - Swipe on solution to delete
+    - Tap on solution / solutionworkings to paste to input
+    - Settings window for app settings
+    - Clear history
+ */
 class CalcModel {
     
     /**
@@ -57,7 +71,7 @@ class CalcModel {
     }
 
     /// Workings of the calculation
-    var workings: String = " "
+    var workings: String = ""
     
     /// List of previous calculations
     var resultList: [Result] = []
@@ -107,6 +121,10 @@ class CalcModel {
     func performOperation(_ op: String) {
         if (op == "ans") {
             workings += resultList.last!.result
+        } else if (op == "d/dx") {
+            if (!workings.isEmpty) {
+                workings = "dx(" + workings + ")"
+            }
         } else {
             workings += op
         }
@@ -115,7 +133,7 @@ class CalcModel {
 
     /// Clears the calculator workings.
     func clearAll() {
-        workings = " "
+        workings = ""
         notify(false)
     }
 
@@ -198,6 +216,7 @@ class CalcModel {
         w.replace("×", with: "*")
         w.replace(",", with: ".")
         w.replace("π", with: "pi")
+        w.replace("dx", with: "d")
         if (w.contains("√(")) {
             let sqrt = w.index(of: "√(")!
             w.replace("√", with: "sqrt")
@@ -233,9 +252,12 @@ class CalcModel {
     
     /// Formats the result before showing in the view.
     func formatResult(_ r: inout String) -> String {
+        r.replace("*", with: "×")
         r.replace(".", with: ",")
         r.replace("pi", with: "π")
         r.replace("sqrt", with: "√")
+        r.replace("log", with: "ln")
+        r.replace("d", with: "dx")
         return r
     }
 
