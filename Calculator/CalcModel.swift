@@ -60,7 +60,7 @@ class CalcModel {
     var workings: String = " "
     
     /// List of previous calculations
-    var resultList: Array<Result> = Array()
+    var resultList: [Result] = []
     
     /// Observers of CalcModel
     private lazy var observers = [Observer]()
